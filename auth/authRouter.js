@@ -34,7 +34,7 @@ router.post("/login", (req, res) => {
             .then(user => {
                 if(user && bcrypt.compareSync(password, user.password)) {
                     const token = generateToken(user);
-                    res.status(200).json({loggedon: user.username, token});
+                    res.status(200).json({loggedon: user.username, department: user.department, token});
                 } else {
                     res.status(403).json({ message: "You shall not pass!" });
                 }

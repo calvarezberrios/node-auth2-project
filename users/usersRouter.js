@@ -7,8 +7,15 @@ const restricted = require("../auth/restricted.js");
 
 router.get("/", restricted, (req, res) => {
     users.find()
-        .then(users => res.json(users))
-        .catch(err => res.status(500).json({ message: "Error retrieving users"}))
+        .where({ department: req.jwt.department })
+        .then(users => {
+            if(users.length > 0) {
+                res.json(users);
+            } else {
+                res.status(400).json({ message: "Missing or Invalid department for logged in user" });
+            }
+        })
+        .catch(err => res.status(500).json({ message: "Error retrieving users"}));
 });
 
 module.exports = router;
